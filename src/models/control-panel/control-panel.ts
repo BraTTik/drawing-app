@@ -1,7 +1,9 @@
 import { ValueObserver } from "../value-observer";
+import { Shortcuts } from "../shortcuts";
 
 export class ControlPanel {
   private static instance: ControlPanel | null;
+  private shortcuts: Shortcuts = new Shortcuts();
 
   private select: HTMLSelectElement;
   private fillColorInput: HTMLInputElement;
@@ -69,6 +71,10 @@ export class ControlPanel {
       "change",
       this.handleInputChange(this.drawToolValue),
     );
+
+    this.shortcuts.set("KeyP", this.selectDrawTool("path"));
+    this.shortcuts.set("KeyR", this.selectDrawTool("rect"));
+    this.shortcuts.set("Space", this.selectDrawTool("select"));
   }
 
   public fillColor = () => this.fillColorValue.value;
@@ -90,4 +96,9 @@ export class ControlPanel {
     (value: ValueObserver<boolean>) => (event: Event) => {
       value.value = (event.target as HTMLInputElement).checked;
     };
+
+  private selectDrawTool = (tool: "select" | "rect" | "path") => () => {
+    this.select.value = tool;
+    this.drawToolValue.value = tool;
+  };
 }

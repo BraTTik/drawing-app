@@ -1,40 +1,43 @@
 import { Point } from "../point";
 import { Shape } from "../shape";
 import { Rect } from "./interface";
-import { addPoints, subPoints } from "../../utils";
+import { Vector } from "../vector";
 
 export class Rectangle extends Shape implements Rect {
-  public get position(): Point {
+  protected _position: Vector;
+
+  public get position(): Vector {
     return this._position;
   }
-  public set position(value: Point) {
-    this._position = value;
+  public set position(value: Point | Vector) {
+    this._position = new Vector(value.x, value.y);
   }
 
   constructor(
-    protected _position: Point,
+    position: Vector | Point,
     public width: number,
     public height: number,
   ) {
     super();
+    this._position = new Vector(position.x, position.y);
   }
 
   drawShape(ctx: CanvasRenderingContext2D) {
-    const pos = addPoints(this.position, this.origin);
+    const pos = new Vector(this.position.x, this.position.y).add(this.origin);
     ctx.rect(pos.x, pos.y, this.width, this.height);
   }
 
   drawGizmoShape(ctx: CanvasRenderingContext2D) {
-    const pos = addPoints(this.position, this.origin);
+    const pos = this.position.add(this.origin);
     ctx.rect(pos.x, pos.y, this.width, this.height);
   }
 
   protected toOriginFigure() {
-    this.origin = {
-      x: this.position.x + this.width / 2,
-      y: this.position.y + this.height / 2,
-    };
+    this.origin = new Vector(
+      this.position.x + this.width / 2,
+      this.position.y + this.height / 2,
+    );
 
-    this.position = subPoints(this.position, this.origin);
+    this.position = this.position.subtract(this.origin);
   }
 }

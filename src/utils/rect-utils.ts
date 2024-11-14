@@ -1,18 +1,19 @@
-import { Rect } from "models/rect";
-import { Point } from "models/point";
+import { Rect } from "../models/rect";
+import { Point } from "../models/point";
+import { Vector } from "../models/vector";
 
-export const getCenter = (rect: Rect): Point => {
-  return {
-    x: rect.position.x + rect.width / 2,
-    y: rect.position.y + rect.height / 2,
-  };
+export const getCenter = (rect: Rect): Vector => {
+  return new Vector(
+    rect.position.x + rect.width / 2,
+    rect.position.y + rect.height / 2,
+  );
 };
 
 export const translateToCenter = (point: Point, rect: Rect): Rect => {
-  const position: Point = {
-    x: point.x - rect.width / 2,
-    y: point.y - rect.height / 2,
-  };
+  const position: Vector = new Vector(
+    point.x - rect.width / 2,
+    point.y - rect.height / 2,
+  );
 
   return { position, width: rect.width, height: rect.height };
 };
@@ -36,23 +37,6 @@ export const getPointsRect = (points: Iterable<Point>): Rect => {
   return {
     width,
     height,
-    position: { x: minX, y: minY },
+    position: new Vector(minX, minY),
   };
 };
-
-export const getCenterOrigin = (points: Iterable<Point>): Rect => {
-  const rect = getPointsRect(points);
-  return {
-    ...rect,
-    position: getCenter(rect),
-  };
-};
-
-export const addPoints = (a: Point, b: Point): Point => ({
-  x: a.x + b.x,
-  y: a.y + b.y,
-});
-export const subPoints = (a: Point, b: Point): Point => ({
-  x: a.x - b.x,
-  y: a.y - b.y,
-});

@@ -1,42 +1,43 @@
 import { Point } from "./point";
 import { Shape } from "./shape";
-import { addPoints, getCenterOrigin, getPointsRect, subPoints } from "../utils";
+import { getPointsRect } from "../utils";
+import { Vector } from "./vector";
 
 export class Path extends Shape {
-  protected points: Point[];
+  protected points: Vector[];
 
   constructor(points: Point[] = []) {
     super();
-    this.points = points;
+    this.points = points.map((p) => Vector.fromPoint(p));
   }
 
-  addPoint(point: Point) {
-    this.points.push(point);
+  addPoint(point: Point | Vector) {
+    this.points.push(Vector.fromPoint(point));
   }
 
   drawShape(ctx: CanvasRenderingContext2D) {
     if (!this.points.length) return;
 
     ctx.beginPath();
-    const startPoint = addPoints(this.points[0], this.origin);
+    const startPoint = this.points[0].add(this.origin);
     ctx.moveTo(startPoint.x, startPoint.y);
     for (let i = 1; i < this.points.length; i++) {
-      const point = addPoints(this.points[i], this.origin);
+      const point = this.points[i].add(this.origin);
       ctx.lineTo(point.x, point.y);
     }
   }
 
   drawGizmoShape(ctx: CanvasRenderingContext2D): void {
     const rect = getPointsRect(
-      this.points.map((point) => addPoints(point, this.origin)),
+      this.points.map((point) => point.add(this.origin)),
     );
     ctx.rect(rect.position.x, rect.position.y, rect.width, rect.height);
   }
 
   protected toOriginFigure() {
-    this.origin = getCenterOrigin(this.points).position;
+    this.origin = Vector.midVector(...this.points);
     for (const point of this.points) {
-      const newPoint = subPoints(point, this.origin);
+      const newPoint = point.subtract(this.origin);
       point.x = newPoint.x;
       point.y = newPoint.y;
     }

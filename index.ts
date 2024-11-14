@@ -3,7 +3,7 @@ import { Point } from "./src/models/point";
 import { Path } from "./src/models/path";
 import { ControlPanel } from "./src/models/control-panel";
 import { Workbench } from "./src/models/workbench";
-import { addPoints, subPoints } from "./src/utils";
+import { Vector } from "./src/models/vector";
 
 const workbench = new Workbench("root", { width: 600, height: 480 });
 const controlPanel = ControlPanel.getInstance();
@@ -31,7 +31,7 @@ function drawRect(event: PointerEvent) {
       y: event.offsetY,
     };
     if (currentShape instanceof AnchorRectangle) {
-      currentShape.position = mousePoint;
+      currentShape.position = new Vector(mousePoint.x, mousePoint.y);
       drawShapes();
     }
   }
@@ -81,8 +81,8 @@ function selectTool(event: MouseEvent) {
         x: event.x,
         y: event.y,
       };
-      const diff = subPoints(mousePos, startPosition);
-      shape.origin = addPoints(diff, shapeOrigin);
+      const diff = Vector.subtract(mousePos, startPosition);
+      shape.origin = Vector.add(diff, shapeOrigin);
       drawShapes();
       workbench.selectShape(shape.id);
     };

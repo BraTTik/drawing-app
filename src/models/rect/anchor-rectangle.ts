@@ -1,14 +1,15 @@
 import { Rectangle } from "./rectangle";
+import { Vector } from "../vector";
 import { Point } from "../point";
 
 export class AnchorRectangle extends Rectangle {
-  private _anchor: Point;
+  private _anchor: Vector;
 
-  set position(point: Point) {
-    this._position = {
-      x: Math.min(point.x, this._anchor.x),
-      y: Math.min(point.y, this._anchor.y),
-    };
+  set position(point: Vector) {
+    this._position = new Vector(
+      Math.min(point.x, this._anchor.x),
+      Math.min(point.y, this._anchor.y),
+    );
     this.width = Math.abs(point.x - this._anchor.x);
     this.height = Math.abs(point.y - this._anchor.y);
   }
@@ -17,10 +18,16 @@ export class AnchorRectangle extends Rectangle {
     return this._position;
   }
 
-  constructor(position: Point, width: number, height: number, anchor?: Point) {
+  constructor(
+    position: Vector | Point,
+    width: number,
+    height: number,
+    anchor?: Vector | Point,
+  ) {
     super(position, width, height);
-    this._anchor = anchor ?? position;
-    this._position = position;
+    const vPos = new Vector(position.x, position.y);
+    this._anchor = anchor ? new Vector(anchor.x, anchor.y) : vPos;
+    this._position = vPos;
   }
 
   toRect(): Rectangle {

@@ -1,6 +1,6 @@
-import { Point } from "./point";
 import { ControlPanel } from "./control-panel";
 import { ColorId } from "./color-id";
+import { Vector } from "./vector";
 
 const getId = () => {
   let id = 1;
@@ -15,7 +15,7 @@ export abstract class Shape {
   public fill = true;
   public stroke = true;
   public selected = false;
-  public origin: Point = { x: 0, y: 0 };
+  public origin: Vector = new Vector(0, 0);
 
   protected isOriginated = false;
   protected colorId: ColorId;

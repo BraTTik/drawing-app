@@ -1,11 +1,11 @@
-import { Point } from "../point";
+import { Vector } from "../vector";
 
 export interface Rect {
-  position: Point;
+  position: Vector;
   width: number;
   height: number;
 }
 
 export interface AnchorRect extends Rect {
-  anchor: Point;
+  anchor: Vector;
 }

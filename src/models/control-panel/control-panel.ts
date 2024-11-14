@@ -74,7 +74,7 @@ export class ControlPanel {
 
     this.shortcuts.set("KeyP", this.selectDrawTool("path"));
     this.shortcuts.set("KeyR", this.selectDrawTool("rect"));
-    this.shortcuts.set("Space", this.selectDrawTool("select"));
+    this.shortcuts.set("KeyV", this.selectDrawTool("select"));
   }
 
   public fillColor = () => this.fillColorValue.value;
